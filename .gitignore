@@ -6,6 +6,12 @@ __pycache__/
 # C extensions
 *.so
 
+<<<<<<< HEAD
+=======
+#specific files
+pword.py
+
+>>>>>>> 71eb7c2b76fbd30912b3d878697e337c0be814de
 # Distribution / packaging
 .Python
 build/
