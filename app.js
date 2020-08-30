@@ -159,21 +159,100 @@ draw_Bar_Chart("940");
 //DRAW A BUBBLE CHART FOR SINGLE ID
 function draw_bubble_Chart(subjectID) {
   //data
-  x_axis_values = [1];
-  y_axis_labels = [1];
-  bubble_size = [1];
+  x_axis_values = [];
+  y_axis_labels = [];
+  bubble_size = [];
 
   // varaibles
   //find the indiviudal data in first index in the array and print to console
   const individualData = subjectSamples.filter(d => d.id == subjectID)[0];
   console.log(individualData);  
- 
- /// Siri, I know how I do this (simialar to the aggreate bar chart 2), but I've run out of time, sorry
- 
+  /// Siri, I know how I do this (simialar to the aggreate bar chart 2), but I've run out of time, sorry
+  //find family names by splitting them by ; and then taking the first five and adding them to an array
+  splitfamilyArr = [];
+  individualData.otu_labels.forEach(function(name) {
+    let i = name.split(';').slice(0,5);
+    splitfamilyArr.push(i);
+  });
+  console.log(splitfamilyArr);
+  //having found the first 5, join em back up!
+  joinfamilyArr = [];
+  splitfamilyArr.forEach(function(name){
+    let i = name.join("+");
+    joinfamilyArr.push(i)
+   });
+  console.log(joinfamilyArr);
+  //this again!!
+  //loop and sum
+    //find unique ID's
+    let uniqueIDs = [];
+      joinfamilyArr.forEach((entry) => {
+      if (uniqueIDs.includes(entry)){ }
+      else {
+      uniqueIDs.push(entry)}
+      });
+      console.log(uniqueIDs);
+    //create an array with all ids and values
+    let mergeArr = {
+      otu_ids: individualData.otu_labels,
+      sample_values: individualData.sample_values
+    };
+    console.log(mergeArr);
+    //create a summary ID, populated with unique IDs
+    let sumArr2 = {
+      otu_ids: uniqueIDs,
+      sample_values: []
+    };
+    console.log(sumArr2);
+    // populate  summary array with zeros
+    sumArr2.otu_ids.forEach((entry) => {
+      let indexUse2 = sumArr2.otu_ids.indexOf(entry);
+      sumArr2.sample_values[indexUse2] = 0;
+    });
+    console.log(sumArr2);
+
+
+    // where there are non-unqiue id's, add the values to each other
+    i=0;
+    mergeArr.otu_ids.forEach((entry) => {
+      let indexUse2 = sumArr2.otu_ids.indexOf(entry);
+      console.log(indexUse2)
+      console.log(sumArr2.sample_values[indexUse2])
+      console.log(i)
+      console.log(mergeArr.sample_values[i] )
+      sumArr2.sample_values[indexUse2] += parseInt(mergeArr.sample_values[i]);
+      i=i+1; 
+    });
+    console.log(sumArr2);
+
+
+    // find x-axise values
+    let x_axis_values3 = sumArr2.sample_values;
+    x_axis_values3.sort(function(a, b){return b - a});
+    x_axis_values3 = x_axis_values3.slice(0,10).reverse();
+    console.log(x_axis_values3);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //define bubble chart // Code from 07-ins-github-pages
     const chart3 = {
-      x: x_axis_values,
-      y: y_axis_labels,
+      x: x_axis_values3,
+      y: joinfamilyArr,
       mode: 'markers',
       marker: {
         size: bubble_size
